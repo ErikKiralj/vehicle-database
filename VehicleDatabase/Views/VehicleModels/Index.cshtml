@@ -1,0 +1,71 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<VehicleDatabase.Models.VehicleModel>
+@{
+    ViewBag.Title = "Vehicle Models";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h2>Vehicle Models</h2>
+
+@using (Html.BeginForm("Index", "VehicleModels", FormMethod.Get))
+{
+    <p>
+        Find vehicle by model name: @Html.TextBox("searchString")
+        <input class = "btn btn-primary" type="submit" value="Search" />
+    </p>
+}
+
+@Html.ActionLink("Add new vehicle model", "New", "VehicleModels", null, new { @class = "btn btn-primary" })
+<br />
+<br />
+
+@if (Model.Count() == 0)
+{
+    <p>No vehicle models avaliable</p>
+}
+
+else
+{ 
+<table class="table table-bordered table">
+    <thead>
+        <tr>
+            <th>
+                Make
+                @Html.ActionLink("⇧", "Index", "VehicleModels", new { sortOrder = "AscendingMakeName", searchString = Request.QueryString["searchString"] }, null)
+                @Html.ActionLink("⇩", "Index", "VehicleModels", new { sortOrder = "DescendingMakeName", searchString = Request.QueryString["searchString"] }, null)
+            </th>
+            <th>
+                Model name
+                @Html.ActionLink("⇧", "Index", "VehicleModels", new { sortOrder = "AscendingModelName", searchString = Request.QueryString["searchString"] }, null)
+                @Html.ActionLink("⇩", "Index", "VehicleModels", new { sortOrder = "DescendingModelName", searchString = Request.QueryString["searchString"] }, null)
+            </th>
+            <th>Abbreviation</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehiclemodel in Model) 
+            {
+            <tr>
+                <td>@vehiclemodel.VehicleMake.Abrv</td>
+                <td>@vehiclemodel.Name</td>
+                <td>@vehiclemodel.Abrv</td>
+                <td style="text-align:center; max-width:20% ">
+                    @Html.ActionLink("Edit", "Edit", "VehicleModels", new { id = vehiclemodel.Id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", "VehicleModels", new { id = vehiclemodel.Id }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = Request.QueryString["sortOrder"], searchString = Request.QueryString["searchString"] }),
+    new PagedListRenderOptions()
+    {
+        Display = PagedListDisplayMode.IfNeeded,
+        DisplayPageCountAndCurrentLocation = true
+    })

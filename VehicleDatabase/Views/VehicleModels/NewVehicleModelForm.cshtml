@@ -1,0 +1,26 @@
+﻿@model VehicleDatabase.ViewModels.NewVehicleModelView
+@{
+    ViewBag.Title = "New vehicle model";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New vehicle model</h2>
+
+@using (Html.BeginForm("Save", "VehicleModels"))
+{ 
+    <div class="form-group">
+        @Html.DropDownListFor(m => m.VehicleModel.VehicleMakeId, new SelectList(Model.VehicleMakes, "Id", "Name"), "Select Make", new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.VehicleModel.Name, new { placeholder = "Name", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.VehicleModel.Name)
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.VehicleModel.Abrv, new { placeholder = "Abbreviation", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.VehicleModel.Abrv)
+    </div>
+    @Html.HiddenFor(m => m.VehicleModel.Id)
+    <button type="submit" class="btn btn-primary">Save vehicle model</button>
+}
+
+

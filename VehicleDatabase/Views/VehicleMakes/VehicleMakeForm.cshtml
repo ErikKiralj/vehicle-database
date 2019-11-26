@@ -1,0 +1,23 @@
+﻿@model VehicleDatabase.Models.VehicleMake
+@{
+    ViewBag.Title = "New vehicle make";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>New vehicle make</h2>
+
+@using (Html.BeginForm("Save", "VehicleMakes"))
+{
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.Name, new { placeholder = "Name", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.Abrv, new { placeholder = "Abbreviation", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Abrv)
+    </div>
+    @Html.HiddenFor(m => m.Id)
+    <button type="submit" class="btn btn-primary">Save vehicle make</button>
+}
+
+
